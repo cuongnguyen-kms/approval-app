@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ApprovalService } from 'src/app/services/approval.service';
+import { ApprovalService } from '../../services/approval.service';
+import { ApprovalRequest } from '../../models/approval-request.model';
 
 @Component({
   selector: 'app-landing-page',
@@ -13,24 +14,35 @@ export class LandingPageComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  startApproval(): void {
-    this.approvalService.startApproval().subscribe({
-      next: () => alert('Approval process started. Check your email!'),
-      error: (err) => console.error('Error:', err)
+  private createApprovalRequest(): ApprovalRequest {
+    return {
+      requestId: 'REQ-' + new Date().getTime().toString(),
+      requesterEmail: 'cuongqnguyen@kms-technology.com',
+      requestDate: new Date().toISOString()
+    };
+  }
+
+  onStartApproval(): void {
+    const request = this.createApprovalRequest();
+    this.approvalService.startApproval(request).subscribe({
+      next: () => alert('Approval started successfully!'),
+      error: () => alert('Failed to start approval.')
     });
   }
 
-  approve(): void {
-    this.approvalService.approve().subscribe({
-      next: () => alert('Approval completed. Email sent!'),
-      error: (err) => console.error('Error:', err)
+  onApprove(): void {
+    const request = this.createApprovalRequest();
+    this.approvalService.approve(request).subscribe({
+      next: () => alert('Approval successful!'),
+      error: () => alert('Failed to approve request.')
     });
   }
 
-  reject(): void {
-    this.approvalService.reject().subscribe({
-      next: () => alert('Approval rejected. Email sent!'),
-      error: (err) => console.error('Error:', err)
+  onReject(): void {
+    const request = this.createApprovalRequest();
+    this.approvalService.reject(request).subscribe({
+      next: () => alert('Approval rejected successfully!'),
+      error: () => alert('Failed to reject request.')
     });
   }
 
