@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { ApprovalRequest } from '../models/approval-request.model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,18 +12,18 @@ export class ApprovalService {
 
   constructor(private http: HttpClient) { }
 
-  startApproval(): Observable<void> {
+  startApproval(request: ApprovalRequest): Observable<void> {
     console.log('Approval process started.');
-    return this.http.post<void>(`${this.apiUrl}/startApproval`, {});
+    return this.http.post<void>(`${this.apiUrl}/startApproval`, request);
   }
 
-  approve(): Observable<void> {
+  approve(request: ApprovalRequest): Observable<void> {
     console.log('Approval granted.');
-    return this.http.post<void>(`${this.apiUrl}/approve`, {});
+    return this.http.post<void>(`${this.apiUrl}/approve`, request);
   }
 
-  reject(): Observable<void> {
+  reject(request: ApprovalRequest): Observable<void> {
     console.log('Approval rejected.');
-    return this.http.post<void>(`${this.apiUrl}/reject`, {});
+    return this.http.post<void>(`${this.apiUrl}/reject`, request);
   }
 }
