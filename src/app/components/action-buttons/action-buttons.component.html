@@ -1,0 +1,13 @@
+<div class="d-flex gap-3 mt-4">
+  <button class="btn btn-primary" (click)="startApproval.emit()">
+    {{ 'START_APPROVAL' | translate }}
+  </button>
+
+  <button class="btn btn-success" (click)="approve.emit()">
+    {{ 'APPROVE' | translate }}
+  </button>
+
+  <button class="btn btn-danger" (click)="reject.emit()">
+    {{ 'REJECT' | translate }}
+  </button>
+</div>
