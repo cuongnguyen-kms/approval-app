@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ApprovalService } from 'src/app/services/approval.service';
 
 @Component({
   selector: 'app-landing-page',
@@ -7,33 +8,30 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LandingPageComponent implements OnInit {
 
-  constructor() { }
+  constructor(private approvalService: ApprovalService) { }
 
   ngOnInit(): void {
   }
 
   startApproval(): void {
-    // this.approvalService.startApproval().subscribe({
-    //   next: () => alert('Approval process started. Check your email!'),
-    //   error: (err) => console.error('Error:', err)
-    // });
-    console.log('Approval process started. Check your email!');
+    this.approvalService.startApproval().subscribe({
+      next: () => alert('Approval process started. Check your email!'),
+      error: (err) => console.error('Error:', err)
+    });
   }
 
   approve(): void {
-    // this.approvalService.approve().subscribe({
-    //   next: () => alert('Approval completed. Email sent!'),
-    //   error: (err) => console.error('Error:', err)
-    // });
-    console.log('Approval completed. Email sent!');
+    this.approvalService.approve().subscribe({
+      next: () => alert('Approval completed. Email sent!'),
+      error: (err) => console.error('Error:', err)
+    });
   }
 
   reject(): void {
-    // this.approvalService.reject().subscribe({
-    //   next: () => alert('Approval rejected. Email sent!'),
-    //   error: (err) => console.error('Error:', err)
-    // });
-    console.log('Approval rejected. Email sent!');
+    this.approvalService.reject().subscribe({
+      next: () => alert('Approval rejected. Email sent!'),
+      error: (err) => console.error('Error:', err)
+    });
   }
 
 }
