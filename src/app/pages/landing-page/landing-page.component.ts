@@ -39,7 +39,7 @@ export class LandingPageComponent implements OnInit {
         }
       },
       error: (err) => {
-        this.notificationService.error(`Error: ${err.message}`);
+        this.notificationService.error(`Error: ${err.error.error}`);
       },
       complete: () => { }
     });
@@ -56,7 +56,7 @@ export class LandingPageComponent implements OnInit {
         this.notificationService.success(response.Message || 'Approval successful!');
       },
       error: (err) => {
-        this.notificationService.error(`Error: ${err.message}`);
+        this.notificationService.error(`Error: ${err.error.error}`);
       },
       complete: () => {
         // Optionally handle completion
@@ -75,7 +75,7 @@ export class LandingPageComponent implements OnInit {
         this.notificationService.success(response.Message || 'Rejection successful!');
       },
       error: (err) => {
-        this.notificationService.error(`Error: ${err.message}`);
+        this.notificationService.error(`Error: ${err.error.error}`);
       },
       complete: () => {
         // Optionally handle completion
