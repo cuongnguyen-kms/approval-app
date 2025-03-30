@@ -1,27 +1,113 @@
-# ApprovalApp
+# ApprovalFunctionApp UI
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.4.
+## 📌 Overview
+ApprovalFunctionApp UI is the **frontend application** for interacting with the **ApprovalFunctionApp backend**. It allows users to **start an approval request, approve, or reject requests** via a clean and responsive web interface.
 
-## Development server
+---
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## 🚀 Features
+✅ **Built with Angular**
+✅ **State Management with Services**
+✅ **Localization with @ngx-translate**
+✅ **API Integration with Azure Functions**
+✅ **UI/UX Best Practices**
+✅ **Unit Testing with Jasmine & Karma**
 
-## Code scaffolding
+---
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## 🏗️ Project Structure
+```
+ApprovalFunctionApp-UI/
+│-- src/
+│   │-- app/
+│   │   │-- components/             # Reusable components
+│   │   │-- pages/                  # Application pages
+│   │   │-- services/               # API services
+│   │   │-- interfaces/             # TypeScript interfaces
+│   │-- assets/                     # Static assets
+│   │-- environments/               # Environment configurations
+│-- angular.json                    # Angular configuration
+│-- package.json                     # Dependencies
+│-- README.md                        # Project documentation
+```
 
-## Build
+---
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## ⚙️ Setup & Requirements
+### 🔹 Prerequisites
+- **Node.js 18+** [(Download)](https://nodejs.org/)
+- **Angular CLI** (Install via npm):
+  ```sh
+  npm install -g @angular/cli
+  ```
+- **A Running Backend** (Ensure the Azure Functions backend is running)
 
-## Running unit tests
+### 🔹 Clone the Repository
+```sh
+git clone https://github.com/YOUR_GITHUB/ApprovalFunctionApp-UI.git
+cd ApprovalFunctionApp-UI
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### 🔹 Install Dependencies
+```sh
+npm install
+```
 
-## Running end-to-end tests
+---
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## 🏃 Running Locally
+### 🔹 Configure Environment
+Update `src/environments/environment.ts` with your backend API URL:
+```ts
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:7071/api' // Change this for deployed API
+};
+```
 
-## Further help
+### 🔹 Start the Angular App
+```sh
+ng serve --open
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+This will open the UI in your default browser at `http://localhost:4200`.
+
+---
+
+## 🌍 Deploying to Azure
+### 🔹 Build for Production
+```sh
+ng build --configuration=production
+```
+
+### 🔹 Deploy to Azure Static Web Apps
+```sh
+az staticwebapp create --name YOUR_UI_APP_NAME \
+    --resource-group YOUR_RESOURCE_GROUP \
+    --source . \
+    --location YOUR_REGION \
+    --app-location "dist/approval-function-app-ui" \
+    --output-location "dist/approval-function-app-ui"
+```
+
+---
+
+## 🧪 Running Tests
+```sh
+ng test
+```
+
+---
+
+## 📜 License
+This project is licensed under the **MIT License**.
+
+---
+
+## 📞 Need Help?
+- **Issues:** Submit an issue on GitHub.
+- **Angular Docs:** [Angular Official Documentation](https://angular.io/).
+- **Azure Static Web Apps Docs:** [Azure Docs](https://learn.microsoft.com/en-us/azure/static-web-apps/).
+
+🚀 Happy Coding! 🎯
+
