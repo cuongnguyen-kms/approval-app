@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { ApprovalRequest } from '../models/approval-request.model';
+import { ApprovalResponse } from '../models/approval-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,18 +13,15 @@ export class ApprovalService {
 
   constructor(private http: HttpClient) { }
 
-  startApproval(request: ApprovalRequest): Observable<void> {
-    console.log('Approval process started.');
-    return this.http.post<void>(`${this.apiUrl}/startApproval`, request);
+  startApproval(request: ApprovalRequest): Observable<ApprovalResponse> {
+    return this.http.post<ApprovalResponse>(`${this.apiUrl}/approval/start`, request);
   }
 
-  approve(request: ApprovalRequest): Observable<void> {
-    console.log('Approval granted.');
-    return this.http.post<void>(`${this.apiUrl}/approve`, request);
+  approve(instanceId: string): Observable<ApprovalResponse> {
+    return this.http.post<ApprovalResponse>(`${this.apiUrl}/approval/approve/${instanceId}`, null);
   }
 
-  reject(request: ApprovalRequest): Observable<void> {
-    console.log('Approval rejected.');
-    return this.http.post<void>(`${this.apiUrl}/reject`, request);
+  reject(instanceId: string): Observable<ApprovalResponse> {
+    return this.http.post<ApprovalResponse>(`${this.apiUrl}/approval/reject/${instanceId}`, null);
   }
 }

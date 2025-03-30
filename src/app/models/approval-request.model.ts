@@ -1,5 +1,5 @@
 export interface ApprovalRequest {
-  requestId: string;
-  requesterEmail: string;
-  requestDate: string;
+  RequestId: string;
+  RequesterEmail: string;
+  RequestDate: string;
 }

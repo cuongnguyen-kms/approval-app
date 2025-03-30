@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ApprovalService } from '../../services/approval.service';
+import { NotificationService } from '../../services/notification.service';
 import { ApprovalRequest } from '../../models/approval-request.model';
+import { ApprovalResponse } from '../../models/approval-response.model';
 
 @Component({
   selector: 'app-landing-page',
@@ -9,40 +11,75 @@ import { ApprovalRequest } from '../../models/approval-request.model';
 })
 export class LandingPageComponent implements OnInit {
 
-  constructor(private approvalService: ApprovalService) { }
+  instanceId: string | null = null;
+  responseMessage: string | null = null;
+
+  constructor(private approvalService: ApprovalService, private notificationService: NotificationService) { }
 
   ngOnInit(): void {
   }
 
   private createApprovalRequest(): ApprovalRequest {
     return {
-      requestId: 'REQ-' + new Date().getTime().toString(),
-      requesterEmail: 'cuongqnguyen@kms-technology.com',
-      requestDate: new Date().toISOString()
+      RequestId: 'REQ-' + new Date().getTime().toString(),
+      RequesterEmail: 'cuongqnguyen@kms-technology.com',
+      RequestDate: new Date().toISOString()
     };
   }
 
   onStartApproval(): void {
     const request = this.createApprovalRequest();
     this.approvalService.startApproval(request).subscribe({
-      next: () => alert('Approval started successfully!'),
-      error: () => alert('Failed to start approval.')
+      next: (response: ApprovalResponse) => {
+        if (response?.InstanceId) {
+          this.instanceId = response.InstanceId;
+          this.notificationService.success(response.Message || 'Approval process started!');
+        } else {
+          this.notificationService.error('Unexpected API response!');
+        }
+      },
+      error: (err) => {
+        this.notificationService.error(`Error: ${err.message}`);
+      },
+      complete: () => { }
     });
   }
 
   onApprove(): void {
-    const request = this.createApprovalRequest();
-    this.approvalService.approve(request).subscribe({
-      next: () => alert('Approval successful!'),
-      error: () => alert('Failed to approve request.')
+    if (!this.instanceId) {
+      this.responseMessage = 'Error: No active approval process found!';
+      return;
+    }
+
+    this.approvalService.approve(this.instanceId).subscribe({
+      next: (response: ApprovalResponse) => {
+        this.notificationService.success(response.Message || 'Approval successful!');
+      },
+      error: (err) => {
+        this.notificationService.error(`Error: ${err.message}`);
+      },
+      complete: () => {
+        // Optionally handle completion
+      }
     });
   }
 
   onReject(): void {
-    const request = this.createApprovalRequest();
-    this.approvalService.reject(request).subscribe({
-      next: () => alert('Approval rejected successfully!'),
-      error: () => alert('Failed to reject request.')
+    if (!this.instanceId) {
+      this.responseMessage = 'Error: No active approval process found!';
+      return;
+    }
+
+    this.approvalService.reject(this.instanceId).subscribe({
+      next: (response: ApprovalResponse) => {
+        this.notificationService.success(response.Message || 'Rejection successful!');
+      },
+      error: (err) => {
+        this.notificationService.error(`Error: ${err.message}`);
+      },
+      complete: () => {
+        // Optionally handle completion
+      }
     });
   }
 
