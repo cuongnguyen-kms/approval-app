@@ -9,9 +9,22 @@ import { ApprovalResponse } from '../models/approval-response.model';
   providedIn: 'root'
 })
 export class ApprovalService {
+  private instanceIdKey = 'approvalInstanceId';
   private readonly apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
+
+  setInstanceId(instanceId: string) {
+    sessionStorage.setItem(this.instanceIdKey, instanceId);
+  }
+
+  getInstanceId(): string | null {
+    return sessionStorage.getItem(this.instanceIdKey);
+  }
+
+  clearInstanceId() {
+    sessionStorage.removeItem(this.instanceIdKey);
+  }
 
   startApproval(request: ApprovalRequest): Observable<ApprovalResponse> {
     return this.http.post<ApprovalResponse>(`${this.apiUrl}/approval/start`, request);

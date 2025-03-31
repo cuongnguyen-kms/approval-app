@@ -2,8 +2,12 @@
 
 <div class="container mt-5">
   <app-action-buttons
+    [loading]="isLoading"
     (startApproval)="onStartApproval()"
     (approve)="onApprove()"
     (reject)="onReject()">
   </app-action-buttons>
+  <div *ngIf="isLoading" class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
 </div>
