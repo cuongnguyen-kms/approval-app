@@ -4,6 +4,7 @@ import { NotificationService } from '../../services/notification.service';
 import { ApprovalRequest } from '../../models/approval-request.model';
 import { ApprovalResponse } from '../../models/approval-response.model';
 
+import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-landing-page',
   templateUrl: './landing-page.component.html',
@@ -13,6 +14,8 @@ export class LandingPageComponent implements OnInit {
 
   instanceId: string | null = null;
   responseMessage: string | null = null;
+  requesterEmail = environment.requesterEmail;
+  isLoading: boolean = false;
 
   constructor(private approvalService: ApprovalService, private notificationService: NotificationService) { }
 
@@ -22,65 +25,65 @@ export class LandingPageComponent implements OnInit {
   private createApprovalRequest(): ApprovalRequest {
     return {
       RequestId: 'REQ-' + new Date().getTime().toString(),
-      RequesterEmail: 'cuongqnguyen@kms-technology.com',
+      RequesterEmail: this.requesterEmail,
       RequestDate: new Date().toISOString()
     };
   }
 
+  private isInstanceIdValid(): boolean {
+    return !!this.approvalService.getInstanceId();
+  }
+
+  setLoadingState(state: boolean) {
+    if (!state) {
+      // Introduce a small delay before hiding the loading indicator
+      setTimeout(() => {
+        this.isLoading = state;
+      }, 500); // 500ms delay for better UX
+    } else {
+      this.isLoading = state;
+    }
+  }
+
   onStartApproval(): void {
+    this.setLoadingState(true);
     const request = this.createApprovalRequest();
-    this.approvalService.startApproval(request).subscribe({
-      next: (response: ApprovalResponse) => {
-        if (response?.InstanceId) {
-          this.instanceId = response.InstanceId;
-          this.notificationService.success(response.Message || 'Approval process started!');
-        } else {
-          this.notificationService.error('Unexpected API response!');
-        }
+    this.approvalService.startApproval(request).subscribe(
+      (response: ApprovalResponse) => {
+        this.approvalService.setInstanceId(response.InstanceId);
+        this.notificationService.success('Approval process started successfully');
+        this.setLoadingState(false);
       },
-      error: (err) => {
-        this.notificationService.error(`Error: ${err.error.error}`);
-      },
-      complete: () => { }
-    });
+      () => this.setLoadingState(false));
   }
 
   onApprove(): void {
-    if (!this.instanceId) {
-      this.responseMessage = 'Error: No active approval process found!';
+    if (!this.isInstanceIdValid()) {
+      this.notificationService.warning('Instance ID is required. Start approval first.');
       return;
     }
-
-    this.approvalService.approve(this.instanceId).subscribe({
-      next: (response: ApprovalResponse) => {
-        this.notificationService.success(response.Message || 'Approval successful!');
+    this.setLoadingState(true);
+    this.approvalService.approve(this.approvalService.getInstanceId()!).subscribe(
+      () => {
+        this.notificationService.success('Approval successful');
+        this.setLoadingState(false);
       },
-      error: (err) => {
-        this.notificationService.error(`Error: ${err.error.error}`);
-      },
-      complete: () => {
-        // Optionally handle completion
-      }
-    });
+      () => this.setLoadingState(false)
+    );
   }
 
   onReject(): void {
-    if (!this.instanceId) {
-      this.responseMessage = 'Error: No active approval process found!';
+    if (!this.isInstanceIdValid()) {
+      this.notificationService.warning('Instance ID is required. Start approval first.');
       return;
     }
-
-    this.approvalService.reject(this.instanceId).subscribe({
-      next: (response: ApprovalResponse) => {
-        this.notificationService.success(response.Message || 'Rejection successful!');
+    this.setLoadingState(true);
+    this.approvalService.reject(this.approvalService.getInstanceId()!).subscribe(
+      () => {
+        this.notificationService.success('Rejection successful');
+        this.setLoadingState(false);
       },
-      error: (err) => {
-        this.notificationService.error(`Error: ${err.error.error}`);
-      },
-      complete: () => {
-        // Optionally handle completion
-      }
-    });
+      () => this.setLoadingState(false)
+    );
   }
-
 }

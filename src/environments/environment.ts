@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   apiUrl: ' http://localhost:7196/api', // Replace with your actual API URL
+  requesterEmail: 'cuongqnguyen@kms-technology.com', // Replace with your actual requester email
 };
 
 /*

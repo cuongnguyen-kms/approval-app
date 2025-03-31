@@ -4,12 +4,11 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { ComponentsModule } from './components/components.module';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ToastrModule } from 'ngx-toastr';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LandingPageComponent } from './pages/landing-page/landing-page.component';
+import { CoreModule } from './core/core.module';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -32,12 +31,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     }),
     ComponentsModule,
-    BrowserAnimationsModule,
-    ToastrModule.forRoot({
-      positionClass: 'toast-top-right',
-      timeOut: 5000,
-      preventDuplicates: true,
-    }),
+    CoreModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
